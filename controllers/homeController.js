@@ -8,6 +8,6 @@ exports.about = (req, res) => {
 
 exports.sayHello = (req, res) => {
     let name = req.params.name ?? 'dada'
-    console.log(req.params);
+    console.log(req.params)
     res.send(`Bonjour ${name}`)
 }
