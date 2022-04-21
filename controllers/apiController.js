@@ -34,6 +34,7 @@ exports.add =  async (req, res) => {
     console.log(req.body)
     // controle de saisie dans l'objet req.body
     const model = req.body
+    //console.log(model);
     let result = await repository.create(model)
     res.json(result)
 }
@@ -44,12 +45,13 @@ exports.remove = async(req, res) =>{
     res.status(404).end()
 }
 
-exports.maj = async(req, res) => {
-
-    let { id  } = req.params
+exports.update = async(req, res) => {
+    console.log( console.log(req.body))
     const model = req.body
-    let result = await repository.update(model,id)
+    model.id = req.params.id
 
-    res.json(result)
+    let result = await repository.update(model)
+    res.status(202).json(result)
 }
+
 

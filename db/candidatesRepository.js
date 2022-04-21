@@ -3,82 +3,70 @@
  * put & post & delete pour 1 element 
  */
 
+const repo = require('./repository')
 
-const db = require('./index')
+
+/**
+ * Retourne la liste des candidats
+ * @returns {Promise} le jeu de résultats dans un tableau
+ */
 
 exports.getAll = () => {
-    return new Promise((resolve, reject) => {
-        db.all("SELECT id, lastname, firstname, slogan FROM candidates", [], (err, rows) => {
-            if (err) {
-                console.error("Erreur SQL" + err)
-                reject(err)
-            } else {
-                resolve(rows)
-            }
-        })
-    })
+
+    return repo.getAll("SELECT id, lastname, firstname, slogan FROM candidates")
+
 }
+
+/**
+ * Retourne un candidat 
+ * @param {Int} id Identifiant du candidat à retourner 
+ * @returns {Promise} le candidat sous forme d'objet ou undefined si identifiant inexistant
+ */
 
 exports.getById = (id) => {
-    return new Promise((resolve, reject) => {
-        db.get("SELECT id, lastname, firstname, slogan FROM candidates WHERE id=?", [id], (err, row) => {
-            if (err) {
-                console.error("Erreur SQL" + err)
-                reject(err)
-            } else {
-                resolve(row)
-            }
-        })
-    })
+
+    return repo.getOne("SELECT id, lastname, firstname, slogan FROM candidates WHERE id=?", [id])
+
 }
+
+/**
+ * Crée un candidat
+ * @param {Object} model { lastname: String, firstname: String, slogan: String }
+ * @returns {Promise}
+ */
 
 exports.create = (model) => {
-    return new Promise((resolve, reject) => {
-        const sql = `INSERT INTO candidates ( lastname, firstname, slogan) VALUES (? ,?, ?)`
-        const params = [model.lastname, model.firstname, model.slogan]
 
-        db.run(sql, params, (err, result) => {
-            if (err) {
-                console.error('Erreur SQL : ' + err)
-                reject(false)
-            } else {
-                resolve(true)
-            }
-        })
-    })
+    const sql = `INSERT INTO candidates ( lastname, firstname, slogan) VALUES (? ,?, ?)`
+    const params = [model.lastname, model.firstname, model.slogan]
+    return repo.run(sql,params)
+
 }
 
-exports.update = (body,id) => {
-    return new Promise ((resolve, reject) => {
-        const sql= (`UPDATE candidates SET lastname=?, firstname=?, slogan=? where id=?` )
-        const params = [body.lastname, body.firstname, body.slogan , id]
+/**
+ * Modifie un candidat
+ * @param {Object} model { lastname: String, firstname: String, slogan: String, id: Int }
+ * @returns {Promise}
+ */
 
-        db.run(sql,params,(err,result) =>{
-           
-            if (err) {
-                console.error('Erreur SQL : ' + err)
-                reject(false)
-            } else {
-                
-                resolve(true)
-            }
-        })
-        
-    })
+exports.update = (model) => {
+
+    const sql = `UPDATE candidates SET lastname=?, firstname=?, slogan=? WHERE id=?`
+    const params = [model.lastname, model.firstname, model.slogan, model.id]
+    return repo.run(sql,params)
+
 }
+
+/**
+ * Supprime un candidat
+ * @param {Int} id Identifiant du candidat à supprimer 
+ * @returns {Promise}
+ */
 
 exports.delete = (id) => {
 
-    return new Promise ((resolve, reject) => {
-        db.run('DELETE FROM candidates WHERE id=?', [id], (err, result) => {
-            if (err) {
-                console.error('Erreur SQL : ' + err)
-                reject(false)
-            } else {
-                resolve(true)
-            }
-        })
-    })
+    return repo.run('DELETE FROM candidates WHERE id=?', [id])
+
 }
 
 

@@ -27,6 +27,11 @@ app.use((req, res, next)=>{
 //gestion des fichiers static
 app.use('/public', express.static(__dirname + '/public'))
 
+
+require('./middlewares/liquid')(app)
+
+
+
 //router = import des routes
 const router = require('./routes')
 
