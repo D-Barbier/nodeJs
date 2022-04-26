@@ -7,30 +7,40 @@ const candidatesController = require('../controllers/candidatesController')
 
 // en attente d'une reponse 
 // req = request && res = response 
-router.get('/' , homeController.index)
-
-router.get('/about' , homeController.about)
 
 //marqueur :variable && stocker dans params
 router.get('/hello/:name?', homeController.sayHello)
 
-router.get('/api', apiController.index)
+router.get('/about' , homeController.about)
 
-router.post('/api', apiController.add)
+router.get('/' , homeController.index)
 
-router.get('/api/:id', apiController.getById)
+/* API CONTROLLER */
+
+router.get('/api/:id', apiController.getById) 
 
 router.put('/api/:id', apiController.update)
 
 router.delete('/api/:id', apiController.remove)
 
-/* Candidates controller */ 
+router.get('/api', apiController.index)
 
-router.get('/candidates/:id' , candidatesController.getById)
-router.put('/candidates/:id' , candidatesController.update)
-router.delete('/candidates/:id' , candidatesController.remove)
-router.get('/candidates/' , candidatesController.index)
-router.post('/candidates/add' , candidatesController.add)
+router.post('/api', apiController.add)
+
+/* Candidates controller */ 
+router.get('/candidates/delete/:id/confirme', candidatesController.remove_post)
+
+router.get('/candidates/edit/:id', candidatesController.update)
+router.get('/candidates/delete/:id', candidatesController.remove)
+router.get('/candidates/add', candidatesController.add)
+router.get('/candidates/:id', candidatesController.getById)
+router.get('/candidates', candidatesController.index)
+
+router.post('/candidates/add',candidatesController.add_post)
+router.post('/candidates/edit/:id', candidatesController.update_post)
+
+
+
 
 /* Routes par defaut & erreurs */
 

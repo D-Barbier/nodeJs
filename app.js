@@ -9,8 +9,27 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
+
 // application express
 const app = express()
+
+
+//test
+const { body, validationResult } = require('express-validator');
+
+app.post(
+    '/user',
+    body('lastname').isLength({ min: 5 }).withMessage('trop petit'),
+    (req, res) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      res.json('erreur')
+    },
+  );
+
 
 //body parser
 app.use(bodyParser.urlencoded())

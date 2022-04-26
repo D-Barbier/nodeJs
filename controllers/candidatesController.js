@@ -8,6 +8,8 @@ remove    Supprimer un candidat existant
 
 const repository = require('../db/candidatesRepository')
 
+
+
 module.exports ={
     async index(req,res){
         try{
@@ -18,35 +20,60 @@ module.exports ={
         }
     },
 
-    async getById(req,res){
-        try{
-            const { id } = req.params
-            let result = await repository.getById(id)
-
-            if(result === undefined) {
+    async getById(req, res) {
+        try {
+            let result = await repository.getById(req.params.id)
+            if(result === undefined) 
+            {
                 res.status(404).json({error: "404"})
             }
-            console.log(result)
-            res.render('singleCandidate', { model :result })
-
-
-        }catch(err){
+            res.render('candidate', { model : result, title: 'Fiche candidat' })
+        } catch (err) {
             res.status(500).end()
-        }
+        }  
     },
 
     async add(req,res){
-        const model = { lastname: a, firstname: b, slogan: c }
+        res.render('candidate_add')
+    },
+
+    async add_post(req,res){
+        
+        const model = req.body
+        console.log(model)
+            
         let result = await repository.create(model)
-        res.render('index-add',{ model :result })
+        res.redirect('/candidates')
+    
     },
 
-    update(req,res){
-
+    async update(req,res){
+        let result = await repository.getById(req.params.id)
+        res.render('candidate_edit', { model : result })
     },
 
-    remove(req,res){
+    async update_post(req,res){
+        const model = req.body
+        // console.log(model)
+        //unary operator
+        //NPUI je dois vérifier les données fournies par l'utilisateur
+        model.id = +req.params.id
+        //console.error( typeof model.id)
+        let result = await repository.update(model)
+        res.redirect('/candidates')
+    },
 
+    async remove(req,res){
+        let result = await repository.getById(req.params.id)
+        res.render('candidate_delete', { model : result })
+    },
+
+    async remove_post(req,res){
+        let { id  } = req.params
+        console.log(req.params.id)
+        let result = await repository.delete(id)
+        
+        res.redirect('/candidates')
     },
 }
 

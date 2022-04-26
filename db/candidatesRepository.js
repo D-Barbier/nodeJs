@@ -3,14 +3,12 @@
  * put & post & delete pour 1 element 
  */
 
-const repo = require('./repository')
-
+ const repo = require('./repository')
 
 /**
  * Retourne la liste des candidats
  * @returns {Promise} le jeu de résultats dans un tableau
  */
-
 exports.getAll = () => {
 
     return repo.getAll("SELECT id, lastname, firstname, slogan FROM candidates")
@@ -22,10 +20,9 @@ exports.getAll = () => {
  * @param {Int} id Identifiant du candidat à retourner 
  * @returns {Promise} le candidat sous forme d'objet ou undefined si identifiant inexistant
  */
-
 exports.getById = (id) => {
 
-    return repo.getOne("SELECT id, lastname, firstname, slogan FROM candidates WHERE id=?", [id])
+    return repo.getOne("SELECT id, lastname, firstname, slogan FROM candidates WHERE id=?", [id]);
 
 }
 
@@ -34,13 +31,11 @@ exports.getById = (id) => {
  * @param {Object} model { lastname: String, firstname: String, slogan: String }
  * @returns {Promise}
  */
-
 exports.create = (model) => {
-
-    const sql = `INSERT INTO candidates ( lastname, firstname, slogan) VALUES (? ,?, ?)`
+    const sql = `INSERT INTO candidates (lastname, firstname, slogan) VALUES (?, ?, ?)`
     const params = [model.lastname, model.firstname, model.slogan]
-    return repo.run(sql,params)
 
+    return repo.run(sql, params)
 }
 
 /**
@@ -48,12 +43,11 @@ exports.create = (model) => {
  * @param {Object} model { lastname: String, firstname: String, slogan: String, id: Int }
  * @returns {Promise}
  */
-
 exports.update = (model) => {
 
     const sql = `UPDATE candidates SET lastname=?, firstname=?, slogan=? WHERE id=?`
     const params = [model.lastname, model.firstname, model.slogan, model.id]
-    return repo.run(sql,params)
+    return repo.run(sql, params)
 
 }
 
@@ -62,11 +56,9 @@ exports.update = (model) => {
  * @param {Int} id Identifiant du candidat à supprimer 
  * @returns {Promise}
  */
-
 exports.delete = (id) => {
 
     return repo.run('DELETE FROM candidates WHERE id=?', [id])
 
 }
-
 
